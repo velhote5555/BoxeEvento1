@@ -1,6 +1,6 @@
 # TITASBET - HTML CSS JS
 
-Site 100% estático com saldo fake e aposta única demo.
+Site 100% estático com saldo fake, aposta única demo e sem botão de reset.
 
 ## Publicar no GitHub Pages
 

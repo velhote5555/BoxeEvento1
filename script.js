@@ -24,7 +24,6 @@ const possibleReturn = document.getElementById("possibleReturn");
 const possibleProfit = document.getElementById("possibleProfit");
 const balanceEl = document.getElementById("balance");
 const placeBetBtn = document.getElementById("placeBet");
-const resetBetBtn = document.getElementById("resetBet");
 const betStatus = document.getElementById("betStatus");
 const ticket = document.querySelector(".ticket");
 
@@ -71,14 +70,14 @@ function updateTicket() {
     stakeInput.disabled = true;
     ticket.classList.add("bet-locked");
     setStatus(
-      `Aposta feita: ${formatMoney(placedBet.stake)} em ${placedBet.pick} @ ${formatOdds(placedBet.odds)}. Retorno possível: ${formatMoney(placedBet.return)}.`,
+      `✅ Aposta feita com sucesso! Apostaste ${formatMoney(placedBet.stake)} em ${placedBet.pick} @ ${formatOdds(placedBet.odds)}. Saldo descontado. Retorno possível: ${formatMoney(placedBet.return)}.`,
       "success"
     );
   } else {
     placeBetBtn.disabled = false;
     stakeInput.disabled = false;
     ticket.classList.remove("bet-locked");
-    setStatus("Só podes fazer 1 aposta neste evento.");
+    setStatus("Escolhe a odd, mete o montante e carrega em Apostar.");
   }
 }
 
@@ -147,20 +146,9 @@ function placeBet() {
   updateTicket();
 }
 
-function resetDemo() {
-  balance = startingBalance;
-  placedBet = null;
-  stakeInput.value = "25";
-  selected = odds[0];
-  localStorage.removeItem("titasbetBalance");
-  localStorage.removeItem("titasbetPlacedBet");
-  renderOdds();
-  updateTicket();
-}
 
 stakeInput.addEventListener("input", updateTicket);
 placeBetBtn.addEventListener("click", placeBet);
-resetBetBtn.addEventListener("click", resetDemo);
 
 renderOdds();
 updateTicket();
