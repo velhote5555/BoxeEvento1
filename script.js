@@ -11,9 +11,13 @@ const odds = [
 ];
 
 const startingBalance = 100;
-let balance = Number(localStorage.getItem("titasbetBalance")) || startingBalance;
 let selected = odds[0];
-let placedBet = JSON.parse(localStorage.getItem("titasbetPlacedBet") || "null");
+
+let balance = localStorage.getItem("titasbetBalance");
+balance = balance === null ? startingBalance : Number(balance);
+
+let placedBet = localStorage.getItem("titasbetPlacedBet");
+placedBet = placedBet ? JSON.parse(placedBet) : null;
 
 const grid = document.getElementById("oddsGrid");
 const stakeInput = document.getElementById("stake");
@@ -26,6 +30,11 @@ const balanceEl = document.getElementById("balance");
 const placeBetBtn = document.getElementById("placeBet");
 const betStatus = document.getElementById("betStatus");
 const ticket = document.querySelector(".ticket");
+const betHistory = document.getElementById("betHistory");
+const emptyHistory = document.getElementById("emptyHistory");
+const successModal = document.getElementById("successModal");
+const closeModal = document.getElementById("closeModal");
+const modalText = document.getElementById("modalText");
 
 function formatOdds(value) {
   return Number(value).toFixed(2);
@@ -41,16 +50,42 @@ function formatMoney(value) {
 
 function saveState() {
   localStorage.setItem("titasbetBalance", String(balance));
-  localStorage.setItem("titasbetPlacedBet", JSON.stringify(placedBet));
+  if (placedBet) {
+    localStorage.setItem("titasbetPlacedBet", JSON.stringify(placedBet));
+  }
+}
+
+function setStatus(message, type = "") {
+  betStatus.textContent = message;
+  betStatus.className = `status ${type}`;
 }
 
 function updateBalance() {
   balanceEl.textContent = formatMoney(balance);
 }
 
-function setStatus(message, type = "") {
-  betStatus.textContent = message;
-  betStatus.className = `status ${type}`;
+function renderHistory() {
+  betHistory.innerHTML = "";
+
+  if (!placedBet) {
+    emptyHistory.style.display = "block";
+    return;
+  }
+
+  emptyHistory.style.display = "none";
+
+  const item = document.createElement("div");
+  item.className = "history-item";
+  item.innerHTML = `
+    <div><strong>Evento:</strong> Afonso vs Pedro</div>
+    <div><strong>Mercado:</strong> ${placedBet.market}</div>
+    <div><strong>Pick:</strong> ${placedBet.pick}</div>
+    <div><strong>Odd:</strong> @ ${formatOdds(placedBet.odds)}</div>
+    <div><strong>Aposta:</strong> ${formatMoney(placedBet.stake)}</div>
+    <div><strong>Retorno possível:</strong> ${formatMoney(placedBet.return)}</div>
+  `;
+
+  betHistory.appendChild(item);
 }
 
 function updateTicket() {
@@ -64,15 +99,13 @@ function updateTicket() {
   possibleReturn.textContent = formatMoney(total);
   possibleProfit.textContent = formatMoney(profit);
   updateBalance();
+  renderHistory();
 
   if (placedBet) {
     placeBetBtn.disabled = true;
     stakeInput.disabled = true;
     ticket.classList.add("bet-locked");
-    setStatus(
-      `✅ Aposta feita com sucesso! Apostaste ${formatMoney(placedBet.stake)} em ${placedBet.pick} @ ${formatOdds(placedBet.odds)}. Saldo descontado. Retorno possível: ${formatMoney(placedBet.return)}.`,
-      "success"
-    );
+    setStatus("✅ Aposta feita com sucesso! O saldo fake foi descontado.", "success");
   } else {
     placeBetBtn.disabled = false;
     stakeInput.disabled = false;
@@ -111,6 +144,17 @@ function renderOdds() {
   });
 }
 
+function showSuccessModal() {
+  modalText.textContent = `Apostaste ${formatMoney(placedBet.stake)} em ${placedBet.pick}. O teu novo saldo é ${formatMoney(balance)}.`;
+  successModal.classList.add("show");
+  successModal.setAttribute("aria-hidden", "false");
+}
+
+function closeSuccessModal() {
+  successModal.classList.remove("show");
+  successModal.setAttribute("aria-hidden", "true");
+}
+
 function placeBet() {
   if (placedBet) {
     setStatus("Já fizeste uma aposta neste evento.", "error");
@@ -131,24 +175,33 @@ function placeBet() {
 
   const totalReturn = stake * selected.odds;
 
-  balance -= stake;
+  balance = Number((balance - stake).toFixed(2));
+
   placedBet = {
-    id: selected.id,
+    event: "Afonso vs Pedro",
     market: selected.market,
     pick: selected.pick,
     odds: selected.odds,
     stake,
     return: totalReturn,
+    createdAt: new Date().toLocaleString("pt-PT"),
   };
 
   saveState();
   renderOdds();
   updateTicket();
+  showSuccessModal();
 }
-
 
 stakeInput.addEventListener("input", updateTicket);
 placeBetBtn.addEventListener("click", placeBet);
+closeModal.addEventListener("click", closeSuccessModal);
+
+successModal.addEventListener("click", (event) => {
+  if (event.target === successModal) {
+    closeSuccessModal();
+  }
+});
 
 renderOdds();
 updateTicket();

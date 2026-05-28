@@ -92,6 +92,13 @@
 
               <button class="simulate" id="placeBet" type="button">Apostar</button>
               <p class="status" id="betStatus">Escolhe a odd, mete o montante e carrega em Apostar.</p>
+
+              <div class="history" id="betHistoryBox">
+                <h4>Histórico</h4>
+                <p id="emptyHistory">Ainda não tens apostas neste evento.</p>
+                <div id="betHistory"></div>
+              </div>
+
               <p class="small">
                 Interface demonstrativa. Não usa dinheiro real. Joga com responsabilidade.
                 Proibido a menores de 18 anos.
@@ -126,6 +133,15 @@
         <span>Odds fictícias para fins de demonstração. 18+.</span>
       </footer>
     </main>
+
+    <div class="modal" id="successModal" aria-hidden="true">
+      <div class="modal-card">
+        <div class="modal-icon">✓</div>
+        <h3>Aposta feita com sucesso!</h3>
+        <p id="modalText">A tua aposta foi registada e o saldo fake foi descontado.</p>
+        <button id="closeModal" type="button">OK</button>
+      </div>
+    </div>
 
     <script src="./script.js"></script>
   </body>
