@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TITASBET</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <section class="hero" id="top">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+
+        <header class="header">
+          <a href="#top" class="logo">TITASBET</a>
+          <nav>
+            <a href="#odds">Odds</a>
+            <a href="#evento">Evento</a>
+            <span>18+</span>
+          </nav>
+        </header>
+
+        <div class="hero-content">
+          <div class="hero-copy">
+            <p class="eyebrow">Casino e sportsbook de combate</p>
+            <h1>TITASBET</h1>
+            <h2>Afonso vs Pedro</h2>
+            <p class="lead">
+              Odds simuladas para o main event Duelo de Titãs. Escolhe o mercado,
+              calcula o retorno e entra no clima da Arena dos Campeões.
+            </p>
+            <div class="actions">
+              <a class="btn primary" href="#odds">Ver odds <span>→</span></a>
+              <a class="btn ghost" href="#evento">Detalhes do combate</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="odds-section" id="odds">
+        <div class="line"></div>
+        <div class="container">
+          <div class="section-title">
+            <p class="eyebrow">Main event markets</p>
+            <h2>Odds do Duelo de Titãs</h2>
+            <p>
+              Preços em formato decimal para uma experiência visual de casino.
+              Estes valores são fictícios e não aceitam apostas reais.
+            </p>
+          </div>
+
+          <div class="odds-layout">
+            <div class="odds-grid" id="oddsGrid"></div>
+
+            <aside class="ticket">
+              <p class="eyebrow">Boletim rápido</p>
+
+              <div class="selection">
+                <p>Seleção</p>
+                <h3 id="selectedPick">Afonso "The Storm"</h3>
+                <div>
+                  <span id="selectedMarket">Resultado final</span>
+                  <strong id="selectedOdds">@ 1.74</strong>
+                </div>
+              </div>
+
+              <label for="stake">Montante</label>
+              <div class="stake-box">
+                <span>EUR</span>
+                <input id="stake" type="number" min="1" step="1" value="25" />
+              </div>
+
+              <div class="returns">
+                <div>
+                  <span>Retorno possível</span>
+                  <strong id="possibleReturn">43,50 €</strong>
+                </div>
+                <div>
+                  <span>Lucro possível</span>
+                  <strong class="profit" id="possibleProfit">18,50 €</strong>
+                </div>
+              </div>
+
+              <button class="simulate" type="button">Simular aposta</button>
+              <p class="small">
+                Interface demonstrativa. Joga com responsabilidade.
+                Proibido a menores de 18 anos.
+              </p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="event-section" id="evento">
+        <div class="event-wrap">
+          <div>
+            <p class="eyebrow">Boxe profissional</p>
+            <h2>Dois guerreiros, um campeão</h2>
+            <p>
+              Main event de 10 rounds na Arena dos Campeões, com transmissão ao vivo
+              exclusiva e mercado de odds focado no confronto Afonso contra Pedro.
+            </p>
+          </div>
+
+          <dl class="event-info">
+            <div>
+              <dt>Combate</dt>
+              <dd>Afonso vs Pedro</dd>
+            </div>
+            <div>
+              <dt>Horário</dt>
+              <dd>16:20 - 18:15</dd>
+            </div>
+            <div>
+              <dt>Local</dt>
+              <dd>Arena dos Campeões</dd>
+            </div>
+            <div>
+              <dt>Formato</dt>
+              <dd>10 rounds</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <footer>
+        <p>TITASBET Casino</p>
+        <span>Odds fictícias para fins de demonstração. 18+.</span>
+      </footer>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
