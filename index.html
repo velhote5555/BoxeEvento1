@@ -50,6 +50,14 @@
             </p>
           </div>
 
+          <div class="balance-bar">
+            <div>
+              <span>Saldo fake</span>
+              <strong id="balance">100,00 €</strong>
+            </div>
+            <button id="resetBet" type="button">Reset demo</button>
+          </div>
+
           <div class="odds-layout">
             <div class="odds-grid" id="oddsGrid"></div>
 
@@ -82,9 +90,10 @@
                 </div>
               </div>
 
-              <button class="simulate" type="button">Simular aposta</button>
+              <button class="simulate" id="placeBet" type="button">Apostar</button>
+              <p class="status" id="betStatus">Só podes fazer 1 aposta neste evento.</p>
               <p class="small">
-                Interface demonstrativa. Joga com responsabilidade.
+                Interface demonstrativa. Não usa dinheiro real. Joga com responsabilidade.
                 Proibido a menores de 18 anos.
               </p>
             </aside>
@@ -104,22 +113,10 @@
           </div>
 
           <dl class="event-info">
-            <div>
-              <dt>Combate</dt>
-              <dd>Afonso vs Pedro</dd>
-            </div>
-            <div>
-              <dt>Horário</dt>
-              <dd>16:20 - 18:15</dd>
-            </div>
-            <div>
-              <dt>Local</dt>
-              <dd>Arena dos Campeões</dd>
-            </div>
-            <div>
-              <dt>Formato</dt>
-              <dd>10 rounds</dd>
-            </div>
+            <div><dt>Combate</dt><dd>Afonso vs Pedro</dd></div>
+            <div><dt>Horário</dt><dd>16:20 - 18:15</dd></div>
+            <div><dt>Local</dt><dd>Arena dos Campeões</dd></div>
+            <div><dt>Formato</dt><dd>10 rounds</dd></div>
           </dl>
         </div>
       </section>

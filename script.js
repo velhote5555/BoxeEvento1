@@ -10,7 +10,10 @@ const odds = [
   { id: "pedro-decision", market: "Método de vitória", pick: "Pedro por decisão", odds: 4.1, note: "seleção" },
 ];
 
+const startingBalance = 100;
+let balance = Number(localStorage.getItem("titasbetBalance")) || startingBalance;
 let selected = odds[0];
+let placedBet = JSON.parse(localStorage.getItem("titasbetPlacedBet") || "null");
 
 const grid = document.getElementById("oddsGrid");
 const stakeInput = document.getElementById("stake");
@@ -19,6 +22,11 @@ const selectedMarket = document.getElementById("selectedMarket");
 const selectedOdds = document.getElementById("selectedOdds");
 const possibleReturn = document.getElementById("possibleReturn");
 const possibleProfit = document.getElementById("possibleProfit");
+const balanceEl = document.getElementById("balance");
+const placeBetBtn = document.getElementById("placeBet");
+const resetBetBtn = document.getElementById("resetBet");
+const betStatus = document.getElementById("betStatus");
+const ticket = document.querySelector(".ticket");
 
 function formatOdds(value) {
   return Number(value).toFixed(2);
@@ -32,6 +40,20 @@ function formatMoney(value) {
   }).format(value);
 }
 
+function saveState() {
+  localStorage.setItem("titasbetBalance", String(balance));
+  localStorage.setItem("titasbetPlacedBet", JSON.stringify(placedBet));
+}
+
+function updateBalance() {
+  balanceEl.textContent = formatMoney(balance);
+}
+
+function setStatus(message, type = "") {
+  betStatus.textContent = message;
+  betStatus.className = `status ${type}`;
+}
+
 function updateTicket() {
   const stake = Number(stakeInput.value) > 0 ? Number(stakeInput.value) : 0;
   const total = stake * selected.odds;
@@ -42,6 +64,22 @@ function updateTicket() {
   selectedOdds.textContent = `@ ${formatOdds(selected.odds)}`;
   possibleReturn.textContent = formatMoney(total);
   possibleProfit.textContent = formatMoney(profit);
+  updateBalance();
+
+  if (placedBet) {
+    placeBetBtn.disabled = true;
+    stakeInput.disabled = true;
+    ticket.classList.add("bet-locked");
+    setStatus(
+      `Aposta feita: ${formatMoney(placedBet.stake)} em ${placedBet.pick} @ ${formatOdds(placedBet.odds)}. Retorno possível: ${formatMoney(placedBet.return)}.`,
+      "success"
+    );
+  } else {
+    placeBetBtn.disabled = false;
+    stakeInput.disabled = false;
+    ticket.classList.remove("bet-locked");
+    setStatus("Só podes fazer 1 aposta neste evento.");
+  }
 }
 
 function renderOdds() {
@@ -50,6 +88,7 @@ function renderOdds() {
   odds.forEach((odd, index) => {
     const card = document.createElement("button");
     card.type = "button";
+    card.disabled = Boolean(placedBet);
     card.className = `odd-card ${odd.id === selected.id ? "active" : ""}`;
     card.style.animationDelay = `${index * 55}ms`;
 
@@ -63,6 +102,7 @@ function renderOdds() {
     `;
 
     card.addEventListener("click", () => {
+      if (placedBet) return;
       selected = odd;
       renderOdds();
       updateTicket();
@@ -72,7 +112,55 @@ function renderOdds() {
   });
 }
 
+function placeBet() {
+  if (placedBet) {
+    setStatus("Já fizeste uma aposta neste evento.", "error");
+    return;
+  }
+
+  const stake = Number(stakeInput.value);
+
+  if (!stake || stake <= 0) {
+    setStatus("Mete um valor válido para apostar.", "error");
+    return;
+  }
+
+  if (stake > balance) {
+    setStatus("Saldo fake insuficiente.", "error");
+    return;
+  }
+
+  const totalReturn = stake * selected.odds;
+
+  balance -= stake;
+  placedBet = {
+    id: selected.id,
+    market: selected.market,
+    pick: selected.pick,
+    odds: selected.odds,
+    stake,
+    return: totalReturn,
+  };
+
+  saveState();
+  renderOdds();
+  updateTicket();
+}
+
+function resetDemo() {
+  balance = startingBalance;
+  placedBet = null;
+  stakeInput.value = "25";
+  selected = odds[0];
+  localStorage.removeItem("titasbetBalance");
+  localStorage.removeItem("titasbetPlacedBet");
+  renderOdds();
+  updateTicket();
+}
+
 stakeInput.addEventListener("input", updateTicket);
+placeBetBtn.addEventListener("click", placeBet);
+resetBetBtn.addEventListener("click", resetDemo);
 
 renderOdds();
 updateTicket();
